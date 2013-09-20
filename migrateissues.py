@@ -117,6 +117,10 @@ def add_comments_to_issue(github_issue, gcode_issue):
     # Add any remaining comments to the Github issue
     output(", adding comments")
     for i, comment in enumerate(gcode_issue['comments']):
+        try:
+            comment['body'] = comment['body'].decode('utf-8')
+        except UnicodeEncodeError:
+            pass
         body = u'_From {author} on {date}_\n\n{body}'.format(**comment)
         if body in existing_comments:
             logging.info('Skipping comment %d: already present', i + 1)
